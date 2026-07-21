@@ -1,6 +1,7 @@
 import { useCampaign } from "@/lib/campaign-store";
 import { Cpu, MemoryStick, Zap, CheckCircle2, Loader2, Circle } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function AgentControlCenter() {
