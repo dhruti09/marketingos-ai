@@ -81,9 +81,9 @@ function Nav() {
           <a href="#pricing" className="hover:text-foreground">Pricing</a>
         </nav>
         <div className="flex-1" />
-        <Link to="/app" className="text-sm text-muted-foreground hover:text-foreground">Sign in</Link>
-        <Link to="/app/generate" className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium text-primary-foreground glow-primary" style={{ background: "var(--gradient-primary)" }}>
-          Start Demo <ArrowRight className="size-4" />
+        <Link to="/sign-in" className="text-sm text-muted-foreground hover:text-foreground">Sign in</Link>
+        <Link to="/sign-up" className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium text-primary-foreground glow-primary" style={{ background: "var(--gradient-primary)" }}>
+          Start Free Demo <ArrowRight className="size-4" />
         </Link>
       </div>
     </header>
