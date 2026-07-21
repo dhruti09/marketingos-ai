@@ -44,8 +44,14 @@ export function AgentControlCenter() {
 
       {/* Agents grid */}
       <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
-        {agents.map((a) => (
-          <div key={a.id} className={cn("card-elevated rounded-2xl p-4 relative overflow-hidden", a.status === "running" && "border-primary/50")}>
+        {agents.map((a, i) => (
+          <motion.div
+            key={a.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.04 }}
+            className={cn("card-elevated rounded-2xl p-4 relative overflow-hidden", a.status === "running" && "border-primary/50")}
+          >
             {a.status === "running" && <div className="absolute inset-x-0 top-0 h-px shimmer" />}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -63,7 +69,7 @@ export function AgentControlCenter() {
             </div>
             <div className="text-xs text-muted-foreground mt-2">{a.role}</div>
             <div className="mt-3 h-1.5 rounded-full bg-muted overflow-hidden">
-              <div className="h-full transition-all" style={{ width: `${a.progress}%`, background: "var(--gradient-primary)" }} />
+              <motion.div className="h-full" animate={{ width: `${a.progress}%` }} transition={{ duration: 0.4 }} style={{ background: "var(--gradient-primary)" }} />
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
               <Metric icon={Zap} label="Confidence" value={`${(a.confidence * 100).toFixed(0)}%`} />
@@ -72,7 +78,7 @@ export function AgentControlCenter() {
               <Metric icon={Zap} label="Tokens" value={`${a.tokens.toLocaleString()}`} />
             </div>
             <div className="mt-2 text-[10px] text-muted-foreground">exec {a.execMs}ms</div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
