@@ -162,9 +162,9 @@ function FeatureGrid() {
         <h2 className="mt-3 text-4xl font-semibold tracking-tight">An operating system for marketing</h2>
         <p className="mt-3 text-muted-foreground">Enterprise-grade coordination between your data, brand and every model you use.</p>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
         {items.map(({ icon: Icon, title, desc }) => (
-          <div key={title} className="card-elevated rounded-2xl p-6">
+          <div key={title} className="card-elevated rounded-2xl p-6 hover:border-primary/40 transition-colors">
             <div className="size-10 rounded-lg flex items-center justify-center glow-primary" style={{ background: "var(--gradient-primary)" }}>
               <Icon className="size-5 text-primary-foreground" />
             </div>
