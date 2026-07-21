@@ -1,6 +1,7 @@
 import { useCampaign } from "@/lib/campaign-store";
 import { Cpu, MemoryStick, Zap, CheckCircle2, Loader2, Circle } from "lucide-react";
 import { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function AgentControlCenter() {
@@ -43,8 +44,14 @@ export function AgentControlCenter() {
 
       {/* Agents grid */}
       <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
-        {agents.map((a) => (
-          <div key={a.id} className={cn("card-elevated rounded-2xl p-4 relative overflow-hidden", a.status === "running" && "border-primary/50")}>
+        {agents.map((a, i) => (
+          <motion.div
+            key={a.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.04 }}
+            className={cn("card-elevated rounded-2xl p-4 relative overflow-hidden", a.status === "running" && "border-primary/50")}
+          >
             {a.status === "running" && <div className="absolute inset-x-0 top-0 h-px shimmer" />}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -62,7 +69,7 @@ export function AgentControlCenter() {
             </div>
             <div className="text-xs text-muted-foreground mt-2">{a.role}</div>
             <div className="mt-3 h-1.5 rounded-full bg-muted overflow-hidden">
-              <div className="h-full transition-all" style={{ width: `${a.progress}%`, background: "var(--gradient-primary)" }} />
+              <motion.div className="h-full" animate={{ width: `${a.progress}%` }} transition={{ duration: 0.4 }} style={{ background: "var(--gradient-primary)" }} />
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
               <Metric icon={Zap} label="Confidence" value={`${(a.confidence * 100).toFixed(0)}%`} />
@@ -71,26 +78,47 @@ export function AgentControlCenter() {
               <Metric icon={Zap} label="Tokens" value={`${a.tokens.toLocaleString()}`} />
             </div>
             <div className="mt-2 text-[10px] text-muted-foreground">exec {a.execMs}ms</div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
       {/* Logs + summary */}
       <div className="grid lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 card-elevated rounded-2xl overflow-hidden">
-          <div className="px-4 h-10 flex items-center justify-between border-b border-border/60">
-            <div className="text-sm font-medium">Streaming logs</div>
+          <div className="px-4 h-10 flex items-center justify-between border-b border-border/60 bg-black/30">
+            <div className="text-sm font-medium flex items-center gap-2">
+              <span className="flex gap-1">
+                <span className="size-2 rounded-full bg-destructive/70" />
+                <span className="size-2 rounded-full bg-warning/70" />
+                <span className="size-2 rounded-full bg-success/70" />
+              </span>
+              orchestrator.log
+            </div>
             <div className="text-[11px] text-muted-foreground">{logs.length} events</div>
           </div>
-          <div ref={logRef} className="h-72 overflow-y-auto p-4 font-mono text-[12px] leading-relaxed">
+          <div ref={logRef} className="h-72 overflow-y-auto p-4 font-mono text-[12px] leading-relaxed bg-black/60">
             {logs.length === 0 && <div className="text-muted-foreground">Waiting for orchestration to begin…</div>}
-            {logs.map((l, i) => (
-              <div key={i} className="flex gap-3">
-                <span className="text-muted-foreground">{l.t}</span>
-                <span className={cn(l.level === "ok" && "text-success", l.level === "warn" && "text-warning")}>·</span>
-                <span className="text-foreground/90">{l.msg}</span>
-              </div>
-            ))}
+            <AnimatePresence initial={false}>
+              {logs.map((l, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex gap-3"
+                >
+                  <span style={{ color: "#6366f1" }}>[{l.t}]</span>
+                  <span className={cn(
+                    l.level === "ok" && "text-success",
+                    l.level === "warn" && "text-warning",
+                    l.level === "info" && "text-foreground/90",
+                  )}>
+                    {l.msg.split(" · ")[0] && <span style={{ color: l.level === "warn" ? "#f59e0b" : "#22c55e" }}>{l.msg.split(" · ")[0]}</span>}
+                    {l.msg.includes(" · ") && <span className="text-foreground/80"> · {l.msg.split(" · ").slice(1).join(" · ")}</span>}
+                  </span>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </div>
         <CampaignSummary />

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Play, Sparkles, Bot, Zap, Shield, Layers, LineChart, Rocket, Palette } from "lucide-react";
+import { ArrowRight, Play, Sparkles, Bot, Zap, Shield, Layers, LineChart, Rocket, Palette, Check } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,9 +21,48 @@ function Landing() {
       <LogoStrip />
       <FeatureGrid />
       <AgentSection />
+      <Pricing />
       <CTA />
       <Footer />
     </div>
+  );
+}
+
+function Pricing() {
+  const tiers = [
+    { name: "Starter", price: "$0", tag: "Free forever", desc: "For solo marketers exploring AI orchestration.", features: ["3 campaigns / mo", "5 asset types", "Community support", "Watermarked exports"], cta: "Start free" },
+    { name: "Pro", price: "$99", tag: "per seat / mo", desc: "For growing marketing teams shipping weekly.", features: ["Unlimited campaigns", "All 20+ asset types", "Brand kit memory", "Priority agents", "PDF · PPTX · ZIP export"], cta: "Start 14-day trial", highlight: true },
+    { name: "Enterprise", price: "Custom", tag: "annual", desc: "SSO, private routing, dedicated agent tuning.", features: ["Everything in Pro", "SSO / SAML", "Private model routing", "Dedicated success manager", "SOC 2 · DPA · custom SLA"], cta: "Talk to sales" },
+  ];
+  return (
+    <section id="pricing" className="mx-auto max-w-7xl px-6 py-24 border-t border-border/40">
+      <div className="text-center max-w-2xl mx-auto">
+        <div className="text-xs uppercase tracking-widest text-primary">Pricing</div>
+        <h2 className="mt-3 text-4xl font-semibold tracking-tight">Simple, transparent pricing</h2>
+        <p className="mt-3 text-muted-foreground">Start free. Scale when your agents ship your first million impressions.</p>
+      </div>
+      <div className="mt-10 grid md:grid-cols-3 gap-4">
+        {tiers.map((t) => (
+          <div key={t.name} className={`card-elevated rounded-2xl p-6 relative ${t.highlight ? "border-primary/60 glow-primary" : ""}`}>
+            {t.highlight && <div className="absolute -top-3 left-6 text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>Most popular</div>}
+            <div className="text-sm font-medium">{t.name}</div>
+            <div className="mt-3 flex items-baseline gap-1.5">
+              <span className="text-4xl font-semibold tracking-tight">{t.price}</span>
+              <span className="text-xs text-muted-foreground">{t.tag}</span>
+            </div>
+            <div className="mt-2 text-sm text-muted-foreground">{t.desc}</div>
+            <ul className="mt-5 space-y-2 text-sm">
+              {t.features.map((f) => (
+                <li key={f} className="flex items-start gap-2"><Check className="size-4 text-primary mt-0.5 shrink-0" /> {f}</li>
+              ))}
+            </ul>
+            <Link to="/sign-up" className={`mt-6 h-10 w-full rounded-lg text-sm font-medium inline-flex items-center justify-center gap-2 ${t.highlight ? "text-primary-foreground glow-primary" : "border border-border hover:bg-muted"}`} style={t.highlight ? { background: "var(--gradient-primary)" } : undefined}>
+              {t.cta}
+            </Link>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -42,9 +81,9 @@ function Nav() {
           <a href="#pricing" className="hover:text-foreground">Pricing</a>
         </nav>
         <div className="flex-1" />
-        <Link to="/app" className="text-sm text-muted-foreground hover:text-foreground">Sign in</Link>
-        <Link to="/app/generate" className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium text-primary-foreground glow-primary" style={{ background: "var(--gradient-primary)" }}>
-          Start Demo <ArrowRight className="size-4" />
+        <Link to="/sign-in" className="text-sm text-muted-foreground hover:text-foreground">Sign in</Link>
+        <Link to="/sign-up" className="inline-flex items-center gap-1.5 h-9 px-4 rounded-lg text-sm font-medium text-primary-foreground glow-primary" style={{ background: "var(--gradient-primary)" }}>
+          Start Free Demo <ArrowRight className="size-4" />
         </Link>
       </div>
     </header>
@@ -148,10 +187,12 @@ function LogoStrip() {
 
 function FeatureGrid() {
   const items = [
-    { icon: Bot, title: "Multi-agent orchestration", desc: "watsonx Orchestrate coordinates Granite, GPT-5.5 and specialist agents." },
-    { icon: Palette, title: "On-brand by default", desc: "Every asset validated against your brand kit, tone and colors." },
-    { icon: Rocket, title: "Ship complete campaigns", desc: "Posts, flyers, ads, emails, landing pages and strategy — in one run." },
-    { icon: LineChart, title: "Forecast performance", desc: "Predicted reach, ROI, CAC and conversion before you publish." },
+    { icon: Bot, title: "Multi-agent orchestration", desc: "watsonx Orchestrate coordinates Granite, GPT-5.5 and specialist agents in parallel." },
+    { icon: Zap, title: "Real-time execution", desc: "Watch agents plan, draft and refine — with streaming logs and live telemetry." },
+    { icon: Layers, title: "20+ asset types", desc: "Posts, flyers, ads, emails, landing pages, video scripts and full strategies." },
+    { icon: Palette, title: "Brand kit memory", desc: "Every asset validated against your tone, colors, typography and audience." },
+    { icon: Rocket, title: "Export to PDF / ZIP / PPTX", desc: "One-click packaging for launch-ready campaigns your team can ship today." },
+    { icon: LineChart, title: "Enterprise analytics", desc: "Predicted reach, ROI, CAC and conversion — before you publish." },
   ];
   return (
     <section id="platform" className="mx-auto max-w-7xl px-6 py-24">
@@ -160,9 +201,9 @@ function FeatureGrid() {
         <h2 className="mt-3 text-4xl font-semibold tracking-tight">An operating system for marketing</h2>
         <p className="mt-3 text-muted-foreground">Enterprise-grade coordination between your data, brand and every model you use.</p>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
         {items.map(({ icon: Icon, title, desc }) => (
-          <div key={title} className="card-elevated rounded-2xl p-6">
+          <div key={title} className="card-elevated rounded-2xl p-6 hover:border-primary/40 transition-colors">
             <div className="size-10 rounded-lg flex items-center justify-center glow-primary" style={{ background: "var(--gradient-primary)" }}>
               <Icon className="size-5 text-primary-foreground" />
             </div>
