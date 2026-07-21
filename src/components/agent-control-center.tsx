@@ -85,19 +85,40 @@ export function AgentControlCenter() {
       {/* Logs + summary */}
       <div className="grid lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 card-elevated rounded-2xl overflow-hidden">
-          <div className="px-4 h-10 flex items-center justify-between border-b border-border/60">
-            <div className="text-sm font-medium">Streaming logs</div>
+          <div className="px-4 h-10 flex items-center justify-between border-b border-border/60 bg-black/30">
+            <div className="text-sm font-medium flex items-center gap-2">
+              <span className="flex gap-1">
+                <span className="size-2 rounded-full bg-destructive/70" />
+                <span className="size-2 rounded-full bg-warning/70" />
+                <span className="size-2 rounded-full bg-success/70" />
+              </span>
+              orchestrator.log
+            </div>
             <div className="text-[11px] text-muted-foreground">{logs.length} events</div>
           </div>
-          <div ref={logRef} className="h-72 overflow-y-auto p-4 font-mono text-[12px] leading-relaxed">
+          <div ref={logRef} className="h-72 overflow-y-auto p-4 font-mono text-[12px] leading-relaxed bg-black/60">
             {logs.length === 0 && <div className="text-muted-foreground">Waiting for orchestration to begin…</div>}
-            {logs.map((l, i) => (
-              <div key={i} className="flex gap-3">
-                <span className="text-muted-foreground">{l.t}</span>
-                <span className={cn(l.level === "ok" && "text-success", l.level === "warn" && "text-warning")}>·</span>
-                <span className="text-foreground/90">{l.msg}</span>
-              </div>
-            ))}
+            <AnimatePresence initial={false}>
+              {logs.map((l, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex gap-3"
+                >
+                  <span style={{ color: "#6366f1" }}>[{l.t}]</span>
+                  <span className={cn(
+                    l.level === "ok" && "text-success",
+                    l.level === "warn" && "text-warning",
+                    l.level === "info" && "text-foreground/90",
+                  )}>
+                    {l.msg.split(" · ")[0] && <span style={{ color: l.level === "warn" ? "#f59e0b" : "#22c55e" }}>{l.msg.split(" · ")[0]}</span>}
+                    {l.msg.includes(" · ") && <span className="text-foreground/80"> · {l.msg.split(" · ").slice(1).join(" · ")}</span>}
+                  </span>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </div>
         <CampaignSummary />
