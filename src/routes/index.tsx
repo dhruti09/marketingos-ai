@@ -21,9 +21,48 @@ function Landing() {
       <LogoStrip />
       <FeatureGrid />
       <AgentSection />
+      <Pricing />
       <CTA />
       <Footer />
     </div>
+  );
+}
+
+function Pricing() {
+  const tiers = [
+    { name: "Starter", price: "$0", tag: "Free forever", desc: "For solo marketers exploring AI orchestration.", features: ["3 campaigns / mo", "5 asset types", "Community support", "Watermarked exports"], cta: "Start free" },
+    { name: "Pro", price: "$99", tag: "per seat / mo", desc: "For growing marketing teams shipping weekly.", features: ["Unlimited campaigns", "All 20+ asset types", "Brand kit memory", "Priority agents", "PDF · PPTX · ZIP export"], cta: "Start 14-day trial", highlight: true },
+    { name: "Enterprise", price: "Custom", tag: "annual", desc: "SSO, private routing, dedicated agent tuning.", features: ["Everything in Pro", "SSO / SAML", "Private model routing", "Dedicated success manager", "SOC 2 · DPA · custom SLA"], cta: "Talk to sales" },
+  ];
+  return (
+    <section id="pricing" className="mx-auto max-w-7xl px-6 py-24 border-t border-border/40">
+      <div className="text-center max-w-2xl mx-auto">
+        <div className="text-xs uppercase tracking-widest text-primary">Pricing</div>
+        <h2 className="mt-3 text-4xl font-semibold tracking-tight">Simple, transparent pricing</h2>
+        <p className="mt-3 text-muted-foreground">Start free. Scale when your agents ship your first million impressions.</p>
+      </div>
+      <div className="mt-10 grid md:grid-cols-3 gap-4">
+        {tiers.map((t) => (
+          <div key={t.name} className={`card-elevated rounded-2xl p-6 relative ${t.highlight ? "border-primary/60 glow-primary" : ""}`}>
+            {t.highlight && <div className="absolute -top-3 left-6 text-[10px] uppercase tracking-widest px-2 py-1 rounded-full text-primary-foreground" style={{ background: "var(--gradient-primary)" }}>Most popular</div>}
+            <div className="text-sm font-medium">{t.name}</div>
+            <div className="mt-3 flex items-baseline gap-1.5">
+              <span className="text-4xl font-semibold tracking-tight">{t.price}</span>
+              <span className="text-xs text-muted-foreground">{t.tag}</span>
+            </div>
+            <div className="mt-2 text-sm text-muted-foreground">{t.desc}</div>
+            <ul className="mt-5 space-y-2 text-sm">
+              {t.features.map((f) => (
+                <li key={f} className="flex items-start gap-2"><Check className="size-4 text-primary mt-0.5 shrink-0" /> {f}</li>
+              ))}
+            </ul>
+            <Link to="/sign-up" className={`mt-6 h-10 w-full rounded-lg text-sm font-medium inline-flex items-center justify-center gap-2 ${t.highlight ? "text-primary-foreground glow-primary" : "border border-border hover:bg-muted"}`} style={t.highlight ? { background: "var(--gradient-primary)" } : undefined}>
+              {t.cta}
+            </Link>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
