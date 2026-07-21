@@ -148,10 +148,12 @@ function LogoStrip() {
 
 function FeatureGrid() {
   const items = [
-    { icon: Bot, title: "Multi-agent orchestration", desc: "watsonx Orchestrate coordinates Granite, GPT-5.5 and specialist agents." },
-    { icon: Palette, title: "On-brand by default", desc: "Every asset validated against your brand kit, tone and colors." },
-    { icon: Rocket, title: "Ship complete campaigns", desc: "Posts, flyers, ads, emails, landing pages and strategy — in one run." },
-    { icon: LineChart, title: "Forecast performance", desc: "Predicted reach, ROI, CAC and conversion before you publish." },
+    { icon: Bot, title: "Multi-agent orchestration", desc: "watsonx Orchestrate coordinates Granite, GPT-5.5 and specialist agents in parallel." },
+    { icon: Zap, title: "Real-time execution", desc: "Watch agents plan, draft and refine — with streaming logs and live telemetry." },
+    { icon: Layers, title: "20+ asset types", desc: "Posts, flyers, ads, emails, landing pages, video scripts and full strategies." },
+    { icon: Palette, title: "Brand kit memory", desc: "Every asset validated against your tone, colors, typography and audience." },
+    { icon: Rocket, title: "Export to PDF / ZIP / PPTX", desc: "One-click packaging for launch-ready campaigns your team can ship today." },
+    { icon: LineChart, title: "Enterprise analytics", desc: "Predicted reach, ROI, CAC and conversion — before you publish." },
   ];
   return (
     <section id="platform" className="mx-auto max-w-7xl px-6 py-24">
